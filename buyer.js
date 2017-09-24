@@ -10,8 +10,14 @@ const authClient = new gdaxWrapper.getAuthClient(
   "https://api.gdax.com"
 );
 
-const ethPublicClient = gdaxWrapper.getPublicClient('ETH-USD');
-const btcPublicClient = gdaxWrapper.getPublicClient('BTC-USD');
+const publicClient = {
+  "ETH-USD": gdaxWrapper.getPublicClient('ETH-USD'),
+  "BTC-USD": gdaxWrapper.getPublicClient('BTC-USD')
+};
+
+const productID = process.env.PRODUCT_ID || config.defaults.productId;
+//biased af
+const theirID = (productID == "ETH-USD") ? "BTC-USD" : "ETH-USD";
 
 const interval = config.defaults.bottomFinderInterval;
 
@@ -23,7 +29,7 @@ const highestPoint = {
 };
 
 function debug(client, msg) {
-  if(client.productID == "ETH-USD") {
+  if(client.productID == productID) {
     console.log(msg);
   }
 }
@@ -42,22 +48,25 @@ async function findBottom(client) {
   }
 }
 
-let btcGager, ethGager = false;
+const mine = publicClient[productID];
+const theirs = publicClient[theirID];
 
-findBottom(ethPublicClient);
+findBottom(mine);
+
+let mineGager, theirGager = false;
 
 setInterval( () => {
 
-  findBottom(ethPublicClient);
+  findBottom(mine);
 
-  ethGager = gager.gageByClient(ethPublicClient);
-  if(ethGager) {
-    gager.printByClient(ethPublicClient);
+  mineGager = gager.gageByClient(mine);
+  if(mineGager) {
+    gager.printByClient(mine);
   }
 
-  btcGager = gager.gageByClient(btcPublicClient);
-  if(btcGager) {
-    gager.printByClient(btcPublicClient);
+  theirGager = gager.gageByClient(theirs);
+  if(theirGager) {
+    gager.printByClient(theirs);
   }
 
 }, interval);

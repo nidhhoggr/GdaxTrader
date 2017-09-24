@@ -13,15 +13,18 @@ LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=10 node sel
 
 > LAST_PURCHASE_AMT
 
-The purcahse amount of your last order
+  The purcahse amount of your last order
 
 > LAST_PURCHASE_PRICE
 
-The price of the cryptocurrency at the time of the purchase
+  The price of the cryptocurrency at the time of the purchase
 
 > MIN_PROFIT_PEAK
 
-The amount the currency should increase by in order to trigger the alarm/sale.
+  The amount the currency should increase by in order to trigger the alarm/sale.
+
+
+---
 
 * To test a break even point:
 
@@ -31,16 +34,23 @@ LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=10 TLP=300 
 
 > TLP
 
-Emulate the seller on a would-be ticker price see profit/loss
+  Emulate the seller on a would-be ticker price see profit/loss
+
+
+---
 
 * To run the buyer (bottom finder):
 
 ```bash
-MM=1 node buyer.js
+PRODUCT_ID=BTC-USD MM=1 node buyer.js
 ```
 > MM
 
-The Min Bottom: Whatever value is provided here will sound an alarm when the bottom is reached.
+  The Min Bottom: Whatever value is provided here will sound an alarm when the bottom is reached.
+
+> PRODUCT_ID
+
+  The GDAX token for the product id. you can omit this paramter and default to `$.defaults.productId` in your configuration.
 
 ### Configuration
 
@@ -65,7 +75,7 @@ The Min Bottom: Whatever value is provided here will sound an alarm when the bot
 
 > $.defaults.productId
 
-Assuming you have a default goto crypto currency, is used by the seller
+Default GDAX product token to specify. e.g. `ETH-USD`,`BTC-USD`,`LTC-USD`
 
 > $.defaults.bottomFinderThreshold
 
