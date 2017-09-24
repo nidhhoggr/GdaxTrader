@@ -1,0 +1,11 @@
+{
+  "defaults": {
+    "bottomFinderThreshold": 10,
+    "bottomFinderInterval": 5000
+  },
+  "gdax": {
+		"key": "YOUR_GDAX_KEY",
+		"secret": "YOUR_GDAX_SECRET",
+		"passphrase": "YOUR_GDAX_PASSPHRASE"
+	}
+}
