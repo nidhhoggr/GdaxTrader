@@ -11,18 +11,36 @@ To run the seller (min peak finder):
 LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=10 node seller.js
 ```
 
+> LAST_PURCHASE_AMT
+
+The purcahse amount of your last order
+
+> LAST_PURCHASE_PRICE
+
+The price of the cryptocurrency at the time of the purchase
+
+> MIN_PROFIT_PEAK
+
+The amount the currency should increase by in order to trigger the alarm/sale.
+
 To test a break even point:
 
 ```bash
 LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=10 TLP=300 node seller.js
 ```
 
+> TLP
+
+Emulate the seller on a would-be ticker price see profit/loss
+
 To run the buyer (bottom finder):
 
 ```bash
 MM=1 node buyer.js
 ```
->MM This is the Min Bottom. Whatever value is provided here will sound an alarm when the bottom is reached.
+> MM
+
+The Min Bottom: Whatever value is provided here will sound an alarm when the bottom is reached.
 
 ### Configuration
 
@@ -43,13 +61,31 @@ MM=1 node buyer.js
     "passphrase": "YOUR_GDAX_PASSPHRASE"
   }
 }
-
->$.defaults.productId: Assuming you have a default goto crypto currency, is used by the seller
->$.defaults.bottomFinderThreshold: Used in place of `process.env.MM` on buyer.js, the min bottom.
->$.defaults.bottomFinderInterval: Number in microseconds to search for the bottom in buyer.js
->$.defaults.peakFinderInterval: Number in microseconds to search for the min peak in seller.js
-
 ```
+
+> $.defaults.productId
+
+Assuming you have a default goto crypto currency, is used by the seller
+
+> $.defaults.bottomFinderThreshold
+
+Used in place of `process.env.MM` on buyer.js, the min bottom.
+
+> $.defaults.bottomFinderInterval
+
+Number in microseconds of timelapse to search for the bottom in buyer.js
+
+>$.defaults.peakFinderInterval
+
+Number in microseconds of timelapse to search for the min peak in seller.js
+
+>$.defaults.sayInterval
+
+Number in microseconds of timelapse to allow the speech module to announce the ticker price
+
+>$.defaults.alarmInterval
+
+Number in microseconds of timelapse to allow the alarm to sound
 
 ### Soon To Come
 
