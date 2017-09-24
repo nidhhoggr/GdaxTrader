@@ -5,7 +5,7 @@ the right time.
 
 ### Examples
 
-To run the seller (min peak finder):
+* To run the seller (min peak finder):
 
 ```bash
 LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=10 node seller.js
@@ -23,7 +23,7 @@ The price of the cryptocurrency at the time of the purchase
 
 The amount the currency should increase by in order to trigger the alarm/sale.
 
-To test a break even point:
+* To test a break even point:
 
 ```bash
 LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=10 TLP=300 node seller.js
@@ -33,7 +33,7 @@ LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=10 TLP=300 
 
 Emulate the seller on a would-be ticker price see profit/loss
 
-To run the buyer (bottom finder):
+* To run the buyer (bottom finder):
 
 ```bash
 MM=1 node buyer.js
