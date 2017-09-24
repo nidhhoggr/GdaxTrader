@@ -1,28 +1,55 @@
 # GdaxBuyer
 
-I wrote this to monitor trend and looks for peaks and bottom to get in and out of the market at 
+I wrote this to monitor trends and look for peaks and bottoms to get in and out of the market at 
 the right time.
 
 ### Examples
 
-To run the seller or the min peak finder:
+To run the seller (min peak finder):
 
 ```bash
-LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=1 node seller.js
+LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=10 node seller.js
 ```
 
-To test a break even point.
+To test a break even point:
 
 ```bash
-LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=1 TLP=300 node seller.js
+LAST_PURCHASE_AMT=5267.02 LAST_PURCHASE_PRICE=295.68 MIN_PROFIT_PEAK=10 TLP=300 node seller.js
 ```
 
-To run the buyer of the bottom finder:
+To run the buyer (bottom finder):
 
 ```bash
 MM=1 node buyer.js
 ```
+>MM This is the Min Bottom. Whatever value is provided here will sound an alarm when the bottom is reached.
 
+### Configuration
+
+```json
+{
+  "defaults": {
+    "productId": "ETH-USD",
+    "bottomFinderThreshold": 10,
+    "bottomFinderInterval": 5000,
+    "peakFinderInterval": 5000,
+    "sayInterval": 0,
+    "alarmInterval": 60000
+  },
+  "gdax": {
+    "tradingFee": ".003",
+    "key": "YOUR_GDAX_KEY",
+    "secret": "YOUR_GDAX_SECRET",
+    "passphrase": "YOUR_GDAX_PASSPHRASE"
+  }
+}
+
+>$.defaults.productId: Assuming you have a default goto crypto currency, is used by the seller
+>$.defaults.bottomFinderThreshold: Used in place of `process.env.MM` on buyer.js, the min bottom.
+>$.defaults.bottomFinderInterval: Number in microseconds to search for the bottom in buyer.js
+>$.defaults.peakFinderInterval: Number in microseconds to search for the min peak in seller.js
+
+```
 
 ### Soon To Come
 

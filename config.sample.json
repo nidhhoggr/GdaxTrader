@@ -1,11 +1,16 @@
 {
   "defaults": {
+    "productId": "ETH-USD",
     "bottomFinderThreshold": 10,
-    "bottomFinderInterval": 5000
+    "bottomFinderInterval": 5000,
+    "peakFinderInterval": 5000,
+    "sayInterval": 0,
+    "alarmInterval": 60000
   },
   "gdax": {
-		"key": "YOUR_GDAX_KEY",
-		"secret": "YOUR_GDAX_SECRET",
-		"passphrase": "YOUR_GDAX_PASSPHRASE"
-	}
+    "tradingFee": ".003",
+    "key": "YOUR_GDAX_KEY",
+    "secret": "YOUR_GDAX_SECRET",
+    "passphrase": "YOUR_GDAX_PASSPHRASE"
+  }
 }
