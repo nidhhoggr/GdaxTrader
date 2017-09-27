@@ -31,7 +31,9 @@ async function gageByClient(client, ticker) {
 
     let trend = ticker.price - productGage.last;
 
-    productGage.trend += trend;
+    if(!isNaN(trend)) {
+      productGage.trend += trend;
+    }
     gage[productID] = {
       can: false,
       last: ticker.price,

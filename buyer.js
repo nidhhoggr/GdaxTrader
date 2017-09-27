@@ -62,6 +62,9 @@ setInterval( () => {
   mineGager = gager.gageByClient(mine);
   if(mineGager) {
     gager.printByClient(mine);
+    if(!mineGager.sign == "sleep") {
+      noise.sayTicker(mineGager.last);
+    }
   }
 
   theirGager = gager.gageByClient(theirs);

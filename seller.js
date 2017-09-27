@@ -20,19 +20,20 @@ const tradingFee = parseFloat(config.gdax.tradingFee);
 const lastPurchaseAmount = parseFloat(process.env.LAST_PURCHASE_AMT);
 const lastPurchasePrice = parseFloat(process.env.LAST_PURCHASE_PRICE);
 const minProfitAllowed = parseFloat(process.env.MIN_PROFIT_PEAK);
-const initialStanding = (lastPurchaseAmount - lastPurchaseAmount * tradingFee);
+const tradingFeeLoss = lastPurchaseAmount * tradingFee;
+const initialStanding = (lastPurchaseAmount - tradingFeeLoss);
 const totalShares = initialStanding / lastPurchasePrice;
 console.log(`Your initial standing is: ${initialStanding}`);
 console.log(`Your total shares are: ${totalShares}`);
 
 function shouldDoSale(lastPrice) {
-  let currentStanding = (lastPrice * totalShares) - (lastPurchaseAmount * tradingFee);
+  let currentStanding = (lastPrice * totalShares);
+  let currentStandingWithFee = currentStanding - (currentStanding * tradingFee);
   console.log(`Last Price: ${lastPrice}  - Total Shares: ${totalShares}`);
   console.log(`Your current standing is ${currentStanding}`);
-  currentStanding -= currentStanding * tradingFee;
-  console.log(`    minus the trading fee: ${currentStanding}`);
-  currentStanding = currentStanding - initialStanding;
-  console.log(`Profit to be made if sold: ${currentStanding}`);
+  console.log(`    minus the trading fee: ${currentStandingWithFee}`);
+  let profitToBeMade = currentStandingWithFee - lastPurchaseAmount;
+  console.log(`Profit to be made if sold: ${profitToBeMade}`);
   console.log(`----------------------------------------------------------`);
   return (currentStanding >= minProfitAllowed);
 }
@@ -44,7 +45,7 @@ function updateStats() {
     }
     else if(body) {
       noise.sayTicker(body);
-      if(shouldDoSale(parseFloat(body.price))) {
+      if(shouldDoSale(parseFloat(body.ask))) {
         noise.soundAlarm();
       }
     }
