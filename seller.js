@@ -35,7 +35,7 @@ function shouldDoSale(lastPrice) {
   let profitToBeMade = currentStandingWithFee - lastPurchaseAmount;
   console.log(`Profit to be made if sold: ${profitToBeMade}`);
   console.log(`----------------------------------------------------------`);
-  return (currentStanding >= minProfitAllowed);
+  return (profitToBeMade >= minProfitAllowed);
 }
 
 function updateStats() {
