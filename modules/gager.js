@@ -1,4 +1,5 @@
 const gdaxWrapper = require('./gdaxWrapper');
+const strings = require('./strings')();
 
 module.exports = {
   gageByClient,
@@ -9,11 +10,13 @@ const gage = {
   "timeout": 1000,
   "ETH-USD": {
     "can": true,
-    "trend": 0
+    "trend": 0,
+    "last": 0
   },
   "BTC-USD": {
     "can": true,
-    "trend": 0
+    "trend": 0,
+    "last": 0
   }
 };
 
@@ -36,7 +39,7 @@ async function gageByClient(client, ticker) {
     }
     gage[productID] = {
       can: false,
-      last: ticker.price,
+      last: parseFloat(ticker.price) || 0,
       trend: productGage.trend,
       sign: (trend > 0) ? "bull" : (trend < 0) ? "bear" : "sleep"
     }
@@ -47,13 +50,10 @@ async function gageByClient(client, ticker) {
 
 function printByClient(client) {
   const clientGage = gage[client.productID];
-  if(clientGage.sign == "bull") {
-    console.log('\x1b[32m%s: %f | %f \x1b[0m', client.productID, clientGage.last, clientGage.trend.toFixed(2));
-  }
-  else if(clientGage.sign == "bear") {
-    console.log('\x1b[31m%s: %f | %f \x1b[0m', client.productID, clientGage.last, clientGage.trend.toFixed(2));
-  }
-  else {
-    console.log('\x1b[36m%s: %f | %f \x1b[0m', client.productID, clientGage.last, clientGage.trend.toFixed(2));
-  }
+  const color = (clientGage.sign == "bull") ? "green" : (clientGage.sign == "bear") ? "red" : "cyan";
+  console.log('%s | %s | %s', 
+    client.productID.wrapInColor(color),
+    clientGage.last.formatting(10, color, 2),
+    clientGage.trend.formatting(10, color, 2)
+  );
 }

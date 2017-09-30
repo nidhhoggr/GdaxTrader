@@ -2,23 +2,7 @@ const gdaxWrapper = require('./modules/gdaxWrapper');
 const gager = require('./modules/gager');
 const config = require('./config.json');
 const noise = require('./modules/noise');
-
-if (!String.prototype.padStart) {
-    String.prototype.padStart = function padStart(targetLength,padString) {
-        targetLength = targetLength>>0; //floor if number or convert non-number to 0;
-        padString = String(padString || ' ');
-        if (this.length > targetLength) {
-            return String(this);
-        }
-        else {
-            targetLength = targetLength-this.length;
-            if (targetLength > padString.length) {
-                padString += padString.repeat(targetLength/padString.length); //append to original to ensure we are longer than needed
-            }
-            return padString.slice(0,targetLength) + String(this);
-        }
-    };
-}
+const strings = require('./modules/strings')();
 
 const authClient = new gdaxWrapper.getAuthClient(
   config.gdax.key, 
@@ -38,6 +22,8 @@ const theirID = (productID == "ETH-USD") ? "BTC-USD" : "ETH-USD";
 
 const interval = 5000;
 
+const precision = process.env.PRECISION || 2;
+
 const mustMeet = parseFloat(process.env.MM || config.defaults.bottomFinderThreshold);
 
 const highestPoint = {
@@ -51,61 +37,46 @@ function debug(client, msg) {
   }
 }
 
-let last = false;
-let runningTotal = 0, lastTradeId = 0, bought, sold;
+let latestTrades = false; 
 
-setInterval( () => {
-  publicClient[productID].getProductTrades((err, response, res) => {
-    res = res.filter((r) => (r.trade_id > lastTradeId));
-    if(res.length) {
-      bought = res.filter((r) =>r.side == "sell");
-      sold = res.filter((r) =>r.side == "buy");
-      
-      const toReturn = {
-        bought: {
-          len: bought.length,
-        },
-        sold: {
-          len: sold.length,
-        }
-      };
+async function displayLatestTrades() {
 
-      toReturn.bought.amt = (bought.length) ? bought.reduce( (p, n) => ({size: parseFloat(p.size) + parseFloat(n.size)})).size : 0;
-      toReturn.sold.amt = (sold.length) ? sold.reduce( (p, n) => ({size: parseFloat(p.size) + parseFloat(n.size)})).size : 0;
-      runningTotal += toReturn.bought.amt - toReturn.sold.amt;
-      
-      if(toReturn.bought.amt && toReturn.sold.amt) {
-        console.log('\x1b[32m%s\x1b[0m @ \x1b[32m%s\x1b[0m | \x1b[31m%s\x1b[0m @ \x1b[31m%s\x1b[0m', 
-          bought.length.toString().padStart(4), 
-          toReturn.bought.amt.toFixed(2).toString().padStart(10), 
-          sold.length.toString().padStart(4), 
-          toReturn.sold.amt.toFixed(2).toString().padStart(10)
-        );
-      }
-      else if (toReturn.bought.amt) {
-         console.log('\x1b[32m%s\x1b[0m @ \x1b[32m%s\x1b[0m | ', 
-          bought.length.toString().padStart(4),
-          parseFloat(toReturn.bought.amt).toFixed(2).toString().padStart(10)
-        );
-      }
-      else if (toReturn.sold.amt) {
-        console.log('%s | \x1b[31m%s\x1b[0m @ \x1b[31m%s\x1b[0m', 
-          ''.padStart(17),
-          sold.length.toString().padStart(4), 
-          parseFloat(toReturn.sold.amt).toFixed(2).toString().padStart(10)
-        );
-      }
-     
-      if(runningTotal >= 0) {
-        console.log('\x1b[32m%s\x1b[0m', runningTotal.toFixed(2).toString().padStart(50)); 
-      }
-      else {
-        console.log('\x1b[31m%s\x1b[0m', runningTotal.toFixed(2).toString().padStart(50));
-      }
+  latestTrades = await gdaxWrapper.getLatestTrades(publicClient[productID]);
+ 
+  if(latestTrades) {
 
-      lastTradeId = res[0].trade_id;
+    if(latestTrades.bought.amt && latestTrades.sold.amt) {
+      console.log('%s @ %s | %s @ %s', 
+        latestTrades.bought.len.formatting(4, "green"),
+        latestTrades.bought.amt.formatting(10, "green", precision), 
+        latestTrades.sold.len.formatting(4, "red"),
+        latestTrades.sold.amt.formatting(10, "red", precision)
+      );
     }
-  });
-}, interval);
+    else if (latestTrades.bought.amt) {
+       console.log('%s @ %s | ', 
+        latestTrades.bought.len.formatting(4, "green"),
+        latestTrades.bought.amt.formatting(10, "green", precision)
+      );
+    }
+    else if (latestTrades.sold.amt) {
+      console.log('%s | %s @ %s', 
+        ''.padStart(17),
+        latestTrades.sold.len.formatting(4, "red"),
+        latestTrades.sold.amt.formatting(10, "red", precision)
+      );
+    }
+   
+    if(latestTrades.runningTotal >= 0) {
+      console.log('%s', latestTrades.runningTotal.formatting(50, "green", precision)); 
+    }
+    else {
+      console.log('%s', latestTrades.runningTotal.formatting(50, "red", precision));
+    }
+
+  }
+}
+
+setInterval( displayLatestTrades, interval);
 
 
