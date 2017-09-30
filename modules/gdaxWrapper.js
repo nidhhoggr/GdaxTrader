@@ -43,7 +43,7 @@ function getLatestTrades(pc) {
   let bought, sold;
   return new Promise((resolve,reject) => {
     pc.getProductTrades((err, response, trades) => {
-      res = trades.filter((r) => (r.trade_id > _latestTrades.lastTradeId));
+      trades = trades.filter((r) => (r.trade_id > _latestTrades.lastTradeId));
       if(trades.length) {
         bought = trades.filter((r) =>r.side == "sell");
         sold = trades.filter((r) =>r.side == "buy");
@@ -59,21 +59,21 @@ function getLatestTrades(pc) {
 
         boughtAmt = (bought.length) ? bought.reduce( (p, n) => ({size: parseFloat(p.size) + parseFloat(n.size)})).size : 0;
         soldAmt = (sold.length) ? sold.reduce( (p, n) => ({size: parseFloat(p.size) + parseFloat(n.size)})).size : 0;
+        
         _latestTrades.runningTotal += boughtAmt - soldAmt;
-
+        _latestTrades.lastTradeId = trades[0].trade_id;
+        
         resolve({
           bought: {
             len: bought.length,
-            amt: boughtAmt
+            amt: parseFloat(boughtAmt)
           },
           sold: {
             len: sold.length,
-            amt: soldAmt
+            amt: parseFloat(soldAmt)
           },
           runningTotal: _latestTrades.runningTotal
         });
-
-        _latestTrades.lastTradeId = trades[0].trade_id;
       }
       else {
         resolve(false);
