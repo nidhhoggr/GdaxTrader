@@ -1,7 +1,5 @@
 const gdaxWrapper = require('./modules/gdaxWrapper');
-const gager = require('./modules/gager');
 const config = require('./config.json');
-const noise = require('./modules/noise');
 const strings = require('./modules/strings')();
 
 const authClient = new gdaxWrapper.getAuthClient(
@@ -17,17 +15,10 @@ const publicClient = {
 };
 
 const productID = process.env.PRODUCT_ID || config.defaults.productId;
-//biased af
-const theirID = (productID == "ETH-USD") ? "BTC-USD" : "ETH-USD";
 
 const interval = 5000;
 
 const precision = process.env.PRECISION || 2;
-
-const highestPoint = {
- 'ETH-USD': false,
- 'BTC-USD': false
-};
 
 let latestTrades = false; 
 
