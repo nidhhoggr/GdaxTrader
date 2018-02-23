@@ -17,6 +17,11 @@ const gage = {
     "can": true,
     "trend": 0,
     "last": 0
+  },
+  "LTC-USD": {
+    "can": true,
+    "trend": 0,
+    "last": 0
   }
 };
 

@@ -12,7 +12,8 @@ const authClient = new gdaxWrapper.getAuthClient(
 
 const publicClient = {
   "ETH-USD": gdaxWrapper.getPublicClient('ETH-USD'),
-  "BTC-USD": gdaxWrapper.getPublicClient('BTC-USD')
+  "BTC-USD": gdaxWrapper.getPublicClient('BTC-USD'),
+  "LTC-USD": gdaxWrapper.getPublicClient('LTC-USD')
 };
 
 const productID = process.env.PRODUCT_ID || config.defaults.productId;
@@ -25,7 +26,8 @@ const mustMeet = parseFloat(process.env.MM || config.defaults.bottomFinderThresh
 
 const highestPoint = {
  'ETH-USD': false,
- 'BTC-USD': false
+ 'BTC-USD': false,
+ 'LTC-USD': false
 };
 
 function debug(client, msg) {
