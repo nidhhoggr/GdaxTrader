@@ -22,6 +22,11 @@ const gage = {
     "can": true,
     "trend": 0,
     "last": 0
+  },
+  "ZRX-USD": {
+    "can": true,
+    "trend": 0,
+    "last": 0
   }
 };
 
