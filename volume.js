@@ -11,7 +11,9 @@ const authClient = new gdaxWrapper.getAuthClient(
 
 const publicClient = {
   "ETH-USD": gdaxWrapper.getPublicClient('ETH-USD'),
-  "BTC-USD": gdaxWrapper.getPublicClient('BTC-USD')
+  "BTC-USD": gdaxWrapper.getPublicClient('BTC-USD'),
+  "LTC-USD": gdaxWrapper.getPublicClient('LTC-USD'),
+  "ZRX-USD": gdaxWrapper.getPublicClient('ZRX-USD')
 };
 
 const productID = process.env.PRODUCT_ID || config.defaults.productId;
